@@ -1,0 +1,47 @@
+using UnityEngine;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
+public class PythonReceiver : MonoBehaviour
+{
+    UdpClient udpClient;
+    IPEndPoint remoteEndPoint;
+    private Vector3 bodyPosition = Vector3.zero;
+
+    void Start()
+    {
+        udpClient = new UdpClient(5052); // Ensure this matches the Python script
+        remoteEndPoint = new IPEndPoint(IPAddress.Any, 5052);
+    }
+
+    void Update()
+    {
+        if (udpClient.Available > 0)
+        {
+            byte[] data = udpClient.Receive(ref remoteEndPoint);
+            string receivedText = Encoding.UTF8.GetString(data);
+            string[] values = receivedText.Split(',');
+
+            if (values.Length == 2)
+            {
+                float x = float.Parse(values[0]);
+                float y = float.Parse(values[1]);
+
+                // Convert to Unity coordinates
+                bodyPosition = new Vector3(x / 100, y / 100, 2);
+                Debug.Log("Received position from Python: " + bodyPosition);
+            }
+        }
+    }
+
+    public Vector3 GetBodyPosition()
+    {
+        return bodyPosition;
+    }
+
+    void OnApplicationQuit()
+    {
+        udpClient.Close();
+    }
+}
