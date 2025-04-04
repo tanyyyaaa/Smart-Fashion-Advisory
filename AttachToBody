@@ -1,0 +1,51 @@
+using UnityEngine;
+
+public class AttachToBody : MonoBehaviour
+{
+    public GameObject tShirtPrefab; // Assign in Inspector
+    private GameObject spawnedTShirt;
+    public PythonReceiver receiver; // Reference to PythonReceiver
+
+    void Start()
+    {
+        // Ensure there's a T-shirt prefab to use
+        /* if (tShirtPrefab == null)
+         {
+             Debug.LogError("T-shirt prefab is not assigned in AttachToBody.cs!");
+             return;
+         }
+
+         if (receiver == null)
+         {
+             Debug.LogError("PythonReceiver is not assigned in AttachToBody.cs!");
+             return;
+         }
+
+         // Instantiate the T-shirt at a default position
+         spawnedTShirt = Instantiate(tShirtPrefab, new Vector3(0, 0, 2), Quaternion.identity);
+         Debug.Log("Spawned T-shirt at default position."); */
+        if (tShirtPrefab == null)
+        {
+            Debug.LogError("T-shirt prefab is not assigned in AttachToBody.cs!");
+            return;
+        }
+
+        spawnedTShirt = Instantiate(tShirtPrefab, new Vector3(0, 0, 1.5f), Quaternion.identity);
+        Debug.Log("✅ T-shirt Spawned: " + spawnedTShirt.name);
+    }
+
+    void Update()
+    {
+        if (spawnedTShirt != null)
+        {
+            // Move the T-shirt closer to the camera
+            spawnedTShirt.transform.position = new Vector3(0, 1.5f, 0.5f);
+            spawnedTShirt.transform.rotation = Quaternion.identity;
+
+            Debug.Log("👕 Adjusted T-shirt Position: " + spawnedTShirt.transform.position);
+            Debug.Log("T-shirt Spawned at: " + spawnedTShirt.transform.position);
+
+        }
+    }
+
+}
